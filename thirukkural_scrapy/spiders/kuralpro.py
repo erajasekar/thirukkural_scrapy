@@ -8,4 +8,4 @@ class KuralproSpider(scrapy.Spider):
     start_urls = ['http://kural.pro/tamil/']
 
     def parse(self, response):
-        pass
+        print (response.xpath('//a'));
