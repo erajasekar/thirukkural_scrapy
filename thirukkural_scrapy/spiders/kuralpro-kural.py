@@ -156,13 +156,24 @@ class KuralproSpider(scrapy.Spider):
             url = "https://kural.pro/tamil/thirukkural-" + str(favKural) + "-" + adhigaram;
             urls.append(url);
           #  print url;
-        return urls[0:2];
+        return urls[0:1];
 
 
     def parse(self, response):
-        page = response.url.split("/")[-2]
         filename = 'fav-kurals.txt';
+        adhigaramName = response.xpath('//meta[@property="position" and @content="5"]/../a/span/text()').get()
+        kuralNo = response.xpath('//meta[@property="position" and @content="6"]/../a/span/text()').get()
+
+
         with open(filename, 'ab') as f:
+            print (adhigaramName);
+            print ("\n")
+            print (kuralNo);
+            print ("\n")
+            f.write(adhigaramName.encode("utf-8"))
+            f.write("\n");
+            f.write(kuralNo.encode("utf-8"))
+            f.write("\n");
             for section in (response.xpath('//section[@class="kural"]')):
                 for kural in section.xpath('./blockquote/text()').getall():
                     print (kural);
