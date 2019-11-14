@@ -160,8 +160,19 @@ class KuralproSpider(scrapy.Spider):
 
 
     def parse(self, response):
+        page = response.url.split("/")[-2]
         filename = 'fav-kurals.txt';
         with open(filename, 'ab') as f:
-            for kural in (response.xpath("//blockquote/text()").getall()):
-                f.write(kural.encode("utf-8"))
+            for section in (response.xpath('//section[@class="kural"]')):
+                for kural in section.xpath('./blockquote/text()').getall():
+                    print (kural);
+                    print ("\n")
+                    f.write(kural.encode("utf-8"))
+                print ("----------")
+                f.write("\n");
+                for meaning in section.xpath('./p[1]/text()').getall():
+                    print (meaning);
+                    print ("\n")
+                    f.write(meaning.encode("utf-8"))
+
                 f.write("\n");
