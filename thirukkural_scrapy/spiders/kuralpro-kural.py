@@ -164,11 +164,10 @@ class KuralproSpider(scrapy.Spider):
         filename = 'fav-kurals.md';
         adhigaramName = response.xpath('//meta[@property="position" and @content="5"]/../a/span/text()').get()
         kuralNo = response.xpath('//meta[@property="position" and @content="6"]/../a/span/text()').get()
-        currentAdhigaram = adhigaramName;
 
         with open(filename, 'ab') as f:
-            if (currentAdhigaram != adhigaramName):
-                print ("same adhi");
+            if (self.currentAdhigaram != adhigaramName):
+                self.currentAdhigaram = adhigaramName;
                 f.write("## " + adhigaramName.encode("utf-8"))
                 f.write("\n\n");
             f.write("### " + kuralNo.encode("utf-8"))
@@ -184,3 +183,4 @@ class KuralproSpider(scrapy.Spider):
                     f.write(meaning.encode("utf-8"))
 
                 f.write("\n\n\n");
+            f.write("[Link](" + response.url + ")\n\n");

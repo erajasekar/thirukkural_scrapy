@@ -13,6 +13,7 @@ BOT_NAME = 'thirukkural_scrapy'
 
 SPIDER_MODULES = ['thirukkural_scrapy.spiders']
 NEWSPIDER_MODULE = 'thirukkural_scrapy.spiders'
+CONCURRENT_REQUESTS = 1
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
