@@ -4,6 +4,7 @@ import scrapy
 
 class KuralproSpider(scrapy.Spider):
     name = 'kuralpro-kural'
+    currentAdhigaram = ''
 
     def start_requests(self):
         urls = self.getUrls();
@@ -156,34 +157,30 @@ class KuralproSpider(scrapy.Spider):
             url = "https://kural.pro/tamil/thirukkural-" + str(favKural) + "-" + adhigaram;
             urls.append(url);
           #  print url;
-        return urls[0:1];
+        return urls[0:5];
 
 
     def parse(self, response):
-        filename = 'fav-kurals.txt';
+        filename = 'fav-kurals.md';
         adhigaramName = response.xpath('//meta[@property="position" and @content="5"]/../a/span/text()').get()
         kuralNo = response.xpath('//meta[@property="position" and @content="6"]/../a/span/text()').get()
-
+        currentAdhigaram = adhigaramName;
 
         with open(filename, 'ab') as f:
-            print (adhigaramName);
-            print ("\n")
-            print (kuralNo);
-            print ("\n")
-            f.write(adhigaramName.encode("utf-8"))
-            f.write("\n");
-            f.write(kuralNo.encode("utf-8"))
-            f.write("\n");
+            if (currentAdhigaram != adhigaramName):
+                print ("same adhi");
+                f.write("## " + adhigaramName.encode("utf-8"))
+                f.write("\n\n");
+            f.write("### " + kuralNo.encode("utf-8"))
+            f.write("\n\n");
             for section in (response.xpath('//section[@class="kural"]')):
+                f.write("```\n")
                 for kural in section.xpath('./blockquote/text()').getall():
-                    print (kural);
-                    print ("\n")
                     f.write(kural.encode("utf-8"))
-                print ("----------")
-                f.write("\n");
+                f.write("\n```");
+                f.write("\n\n")
+                f.write("> ");
                 for meaning in section.xpath('./p[1]/text()').getall():
-                    print (meaning);
-                    print ("\n")
                     f.write(meaning.encode("utf-8"))
 
-                f.write("\n");
+                f.write("\n\n\n");
